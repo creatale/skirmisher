@@ -23,10 +23,11 @@ module.exports = class MapSystem extends System
 		if state.queryEntities(Map)[0]?
 			return
 		else
+			console.log 'create map'
 			map = state.createEntity()
 			map.addComponent Map
-			for x in [1..Map.WIDTH]
-				for y in [1..Map.HEIGHT]
+			for x in [1..Map::WIDTH]
+				for y in [1..Map::HEIGHT]
 					tile = state.createEntity()
 					tile.addComponent(new Tile {x: x, y: y})
 					pos = hex.tileToSurfaceCoordinates x, y

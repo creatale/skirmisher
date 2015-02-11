@@ -8,6 +8,7 @@ KeyInputSystem = require './systems/key_input'
 GraphicsSystem = require './systems/graphics'
 MediatorSystem = require './systems/mediator'
 PickingSystem = require './systems/picking'
+MapSystem = require './systems/map'
 
 Input = require './components/input'
 InputSettings = require './components/input_settings'
@@ -46,6 +47,7 @@ module.exports = class Game
 		@engine.addSystem KeyInputSystem
 		@engine.addSystem TouchInputSystem
 		@engine.addSystem MouseInputSystem
+		@engine.addSystem MapSystem
 		@engine.addSystem new PickingSystem(graphics.levelContainer, graphics.hudContainer)
 
 		

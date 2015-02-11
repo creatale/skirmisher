@@ -19,7 +19,7 @@ module.exports = class GraphicsSystem extends System
 	bounds: false
 	stage: false
 	constructor: (@stage, @container, @stats, loadingFinished) ->
-		@receives = ['component-added:Sprite', 'component-removed:Sprite', '!graphics:twistEffect']
+		@receives = ['component-added:Sprite', 'component-removed:Sprite', 'component-added:Tile', '!graphics:twistEffect']
 		@renderer = PIXI.autoDetectRenderer(800, 600, autoResize: false)
 		
 		#@domElement = $(@renderer.view).css
@@ -167,6 +167,26 @@ module.exports = class GraphicsSystem extends System
 					@weaponContainer.addChild item
 				else
 					@levelContainer.addChild item
+
+		hexCorner = (center, size, i) =>
+			angle = 2 * Math.PI / 6 * (i + 0.5)
+			x = (center.x + size) * (Math.cos angle)
+			y = (center.y + size) * (Math.sin angle)
+			return new PIXI.Point x, y
+
+		for event in receivers['component-added:Tile']()
+			corners = []
+			for i in [0..5]
+				corner = hexCorner {x: 0, y:0}, 50, i
+				corners.push corner
+			graphics = new PIXI.Graphics()
+			console.log corners
+			graphics.beginFill '#FFFF00'
+			graphics.drawShape new PIXI.Polygon corners
+			graphics.endFill()
+			@levelContainer.addChild graphics
+
+
 
 		# Remove PIXI sprites.
 		for event in receivers['component-removed:Sprite']()

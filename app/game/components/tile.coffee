@@ -1,5 +1,5 @@
 module.exports = class Tile
 
-  type: 'tile'
+  type: 'Tile'
 
-  constructor: (@position, @texture = 'none') ->
+  constructor: (@coordinates) ->
