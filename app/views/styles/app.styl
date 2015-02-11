@@ -1,0 +1,251 @@
+@import nib
+creatale-primary = #FF7E0F
+creatale-secondary = #FFB00D
+
+font-color = #FEC
+hightlight-font-color = #FC4
+font-stack = 'Titan One', cursive
+/*body
+	background-image url('/images/Hintergrund.jpg')
+	background-size cover
+	background-repeat repeat-y*/
+
+html, body
+	height 100%
+	margin 0
+	padding 0
+
+a
+	text-decoration none
+
+.container
+	width 100%
+	padding 0
+
+#game
+	position fixed
+	width 100%
+	height 100%
+	
+.stats
+	position absolute
+	bottom 0
+	right 0
+	z-index 9001
+
+	.logic
+		#fps
+			background-color #400 !important
+		#fpsText
+			color #F00 !important
+		#fpsGraph
+			background-color #F00 !important
+			span
+				background-color #700 !important
+
+#game-over
+	max-width 100%
+	height 100vh
+	font-family font-stack
+	text-align center
+	background-image url('/images/interface/highscore.jpg')
+	background-size cover
+	background-repeat no-repeat
+		
+	h1
+		font-size 10vh
+	h2
+		font-size 4vh
+
+	h1, h2
+		color font-color
+		font-weight normal
+		margin 0
+			
+	a
+		text-decoration none
+		h1
+			color hightlight-font-color
+		
+	img
+		max-width 95%
+		height 46vh
+		padding 2vh
+		
+#home
+	text-align center
+	height 100%
+	overflow hidden
+	
+	#splash
+		max-height 100%
+
+				
+// MAIN MENU
+
+tunnelBackground()
+	background-image url('/images/interface/Background.png')
+	background-size 25em auto
+	background-position center top
+	background-repeat repeat-y
+
+#main-menu
+	min-height 100%
+	margin 0 auto
+	padding-bottom 1.25em
+	text-align center
+	color font-color
+	font-family font-stack
+	
+	background-image url('/images/interface/mainmenu.jpg')
+	background-size cover
+	background-repeat no-repeat
+	
+	#title
+		width 50em
+		margin-top 10em
+		margin-bottom 0em
+
+	a.button:last-child
+		margin-bottom 0
+
+a.button
+	font-size 1.5em
+	width 8em
+	height 1em
+	padding 1em 0
+	margin 0 auto
+	margin-bottom 1.25em
+	color font-color
+	display block
+	
+	
+	text-decoration none
+	background-image url('/images/interface/Button.png')
+	background-size 100% 100%
+
+#credits
+	#title
+		padding-top 5%
+		height 10%
+		margin-bottom 0em
+	
+	small
+		font-size 0.75em
+		
+	h3
+		margin-top 1.5em
+		margin-bottom 0
+		font-size 150%
+		
+	h4
+		margin-top 0.2em
+		color hightlight-font-color
+		font-size 150%
+	a
+		color hightlight-font-color
+	text-align center
+	color font-color
+	font-family font-stack
+	
+	background-image url('/images/interface/credits.jpg')
+	background-size cover
+	background-repeat no-repeat
+
+	min-height 100vh
+
+	h1, h2, h3, h4, h5, h6, h7
+		font-weight normal
+		
+	a.sfx
+		font-size 0.75em
+		color font-color
+		
+		color hightlight-font-color
+	
+	a.button
+		margin-top 2em
+		color font-color
+		
+	p
+		color hightlight-font-color
+		font-family Helvetica
+		font-size 0.75em
+
+#highscore
+	h1, h2, h3, h4, h5, h6, h7
+		font-weight normal
+	#title
+		padding-top 5%
+		height 10%
+		margin-bottom 0em
+	
+	#scores
+		box-sizing border-box
+		width 56vh
+		padding-right 20vh
+		margin auto
+		text-align right
+	text-align center
+	color font-color
+	font-family font-stack
+	
+	background-image url('/images/interface/highscore.jpg')
+	background-size cover
+	background-repeat no-repeat
+	
+	a.button
+		margin-top 2em
+		
+	min-height 100vh
+		
+#howto
+	width 100%
+	height 100vh
+	background-image url('/images/interface/Level-Area_large.jpg')
+	background-size cover
+	background-repeat no-repeat
+	
+#howto-inner
+	box-sizing border-box
+	width 50vh
+	margin auto
+	height 100%
+	padding 5vh
+	
+	text-align center
+	color font-color
+	font-family font-stack
+	background-image url('/images/interface/Background.png')
+	background-size 25em auto
+	background-position center top
+	background-repeat repeat-y
+	//background-image url('/images/interface/Tutorial.png')
+	
+	p
+		font-size 150%
+	
+	a.button
+		position absolute
+		bottom 1em
+		left 45%
+		margin 0 auto
+
+#exit
+	width 100%
+	height 100%
+	background black
+	text-align center
+	
+	h1
+		position absolute
+		margin auto
+		top 0
+		left 0
+		bottom 0
+		right 0
+		height 1em
+		color creatale-primary
+		font-family font-stack
+		font-weight normal
+		font-size 4em

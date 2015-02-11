@@ -1,0 +1,31 @@
+{
+  "name": "skirmisher",
+  "version": "0.0.1",
+  "main": "public/javascripts/app.js",
+  "dependencies": {
+    "jquery": "~2",
+    "chaplin": "~1",
+    "console-polyfill": "~0.1.0",
+    "lodash": "~2",
+    "moment": "~2.6",
+    "async": "~0.9",
+    "stats.js": "*",
+    "pixi.js": "~2.2"
+  },
+  "overrides": {
+    "backbone": {
+      "comment": "das muss so, sonst wird vendor.js falsch zusammengesteckt.",
+      "dependencies": {
+        "lodash": "*",
+        "jquery": "*"
+      },
+      "main": "backbone.js"
+    },
+    "async": {
+      "main": "lib/async.js"
+    },
+    "stats.js": {
+      "main": "build/stats.min.js"
+    }
+  }
+}

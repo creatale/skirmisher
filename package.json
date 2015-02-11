@@ -1,0 +1,31 @@
+{
+  "name": "gw21",
+  "version": "0.0.1",
+  "description": "games!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@crate:gw20.git"
+  },
+  "author": "",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "async": "^0.9.0",
+    "auto-reload-brunch": ">= 1.0 < 1.a8",
+    "clean-css-brunch": ">= 1.0 < 1.8",
+    "coffee-script": "^1.7.1",
+    "coffee-script-brunch": ">= 1.7 < 2.0",
+    "css-brunch": ">= 1.0 < 1.8",
+    "glob": "^4.0.6",
+    "gm": "^1.17.0",
+    "jade-brunch": ">= 1.0 < 1.8",
+    "javascript-brunch": ">= 1.0 < 1.8",
+    "jeet": "^6.1.2",
+    "static-jade-brunch": ">= 1.0 < 1.8",
+    "stylus-brunch": ">= 1.0 < 1.8"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,12 @@
+.DS_Store
+[Tt]humbs.db
+
+*~
+*.log
+*.log.html
+*.blend[0-9]
+
+app/assets/*.html
+log/
+node_modules/
+public/
