@@ -8,6 +8,7 @@ KeyInputSystem = require './systems/key_input'
 GraphicsSystem = require './systems/graphics'
 MediatorSystem = require './systems/mediator'
 PickingSystem = require './systems/picking'
+TurnSystem = require './systems/turn'
 MapSystem = require './systems/map'
 
 Input = require './components/input'
@@ -27,7 +28,7 @@ module.exports = class Game
 		logicStats = new Stats()
 		$(logicStats.domElement).addClass 'logic'
 		stats.append logicStats.domElement
-		stage = new PIXI.Stage(0x332222)
+		stage = new PIXI.Stage(0x000000)
 		# Engine.
 		@initialize container, stage, renderStats, logicStats
 		container.append stats
@@ -50,7 +51,7 @@ module.exports = class Game
 		@engine.addSystem MapSystem
 		@engine.addSystem new PickingSystem(graphics.levelContainer, graphics.hudContainer)
 
-		
+		@engine.addSystem TurnSystem
 		@engine.addSystem graphics
 		@engine.addSystem new LogicStatsEndSystem logicStats
 

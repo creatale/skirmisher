@@ -1,6 +1,7 @@
 {System} = require '../base/ecs'
 Sprite = require '../components/sprite'
 Position = require '../components/position'
+Tile = require '../components/tile'
 GraphicsConstants = require '../lib/graphics_constants'
 
 DEBUG = false
@@ -168,23 +169,25 @@ module.exports = class GraphicsSystem extends System
 				else
 					@levelContainer.addChild item
 
-		hexCorner = (center, size, i) =>
+		hexCorner = (size, i) =>
 			angle = 2 * Math.PI / 6 * (i + 0.5)
-			x = (center.x + size) * (Math.cos angle)
-			y = (center.y + size) * (Math.sin angle)
+			x = size * (Math.cos angle)
+			y = size * (Math.sin angle)
 			return new PIXI.Point x, y
 
 		for event in receivers['component-added:Tile']()
 			corners = []
-			console.log 'tile added', event[1].get('Position')
+			# assume tiles never move
+			position = event[1].get('Position')[0]
 			for i in [0..5]
-				corner = hexCorner event[1].get('Position')[0], 70, i
-				console.log corner
+				corner = hexCorner Tile::DISPLAY_SIZE/2, i
 				corners.push corner
 			graphics = new PIXI.Graphics()
-			graphics.beginFill '#FFFF00'
+			graphics.beginFill 0xFF0000
 			graphics.drawShape new PIXI.Polygon corners
 			graphics.endFill()
+			graphics.position.x = position.x * Tile::DISPLAY_SIZE
+			graphics.position.y = position.y * Tile::DISPLAY_SIZE
 			@levelContainer.addChild graphics
 
 
