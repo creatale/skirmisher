@@ -47,12 +47,32 @@ module.exports = class TurnSystem extends System
 			serialized.entities.push serializedEntity
 			
 		# Serialize (pending) events
-		for eventName, data of state.eventEmitter.listeners
-			serialized.pendingEvents[eventName] = JSON.stringify data, entityReplacer
+		for eventName, listener of state.eventEmitter.listeners
+			target = serialized.pendingEvents[eventName] = []
+			for subscriber in listener
+				target.push JSON.stringify subscriber.aggregatedEvents, entityReplacer
 		return serialized
 		
 	restoreState: (target, serializedState) =>
-		undefined
+		for entity of target.entities
+			target.removeEntity entity
+		
+		for serializedEntity in serializedState.entities
+			entity = new Entity serializedEntity.id
+			target.addEntity entity
+			for componentType, components of serializedEntity.components
+				for serializedComponent of components
+					data = JSON.parse serializedComponent
+					# FIXME Needs a factory
+					component = entity.addComponent componentType
+					for key, value of data
+						component[key] = value
+						
+		for eventName, listeners of serializedState.pendingEvents
+			for serializedEvents, index in listeners
+				target.eventEmitter[eventName][index].aggregatedEvents = JSON.parse serializedEvents
+				
+		return
 
 
 entityReplacer = (key, value) ->
