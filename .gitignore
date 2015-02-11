@@ -9,4 +9,5 @@
 app/assets/*.html
 log/
 node_modules/
+bower_components/
 public/
