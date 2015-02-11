@@ -1,4 +1,4 @@
-{System} = require '../base/ecs'
+{System, Entity} = require '../base/ecs'
 
 # TurnSystem
 #
@@ -20,7 +20,7 @@ module.exports = class TurnSystem extends System
 	step: (deltaTime, state, receivers) =>
 		# What to do on several 'turn:end' in one tick? Currently collapses them into one.
 		turnEnded = receivers['!turn:end']()?
-		if turnEnded
+		if turnEnded.length != 0
 			@states.push @serializeState(state)
 		
 		for event in receivers['!turn:undo']()
@@ -48,9 +48,16 @@ module.exports = class TurnSystem extends System
 			
 		# Serialize (pending) events
 		for eventName, data of state.eventEmitter.listeners
-			serialized.pendingEvents[eventName] = JSON.stringify data
-			
+			serialized.pendingEvents[eventName] = JSON.stringify data, entityReplacer
 		return serialized
 		
 	restoreState: (target, serializedState) =>
 		undefined
+
+
+entityReplacer = (key, value) ->
+	if value instanceof Entity
+		return 'entity:' + value.id
+	return value
+
+# entityReviver

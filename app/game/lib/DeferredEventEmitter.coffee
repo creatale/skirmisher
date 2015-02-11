@@ -9,10 +9,12 @@ module.exports = class DeferredEventEmitter
 		@listeners[event] = [] unless @listeners[event]
 		@listeners[event].push listener
 
-		return ->
+		receiver = ->
 			events = listener.aggregatedEvents
 			listener.aggregatedEvents = []
 			return events
+		receiver._listener = listener
+		return receiver
 
 	emit: (event) =>
 		args = Array.prototype.slice.call arguments
