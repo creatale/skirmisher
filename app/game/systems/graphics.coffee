@@ -176,11 +176,12 @@ module.exports = class GraphicsSystem extends System
 
 		for event in receivers['component-added:Tile']()
 			corners = []
+			console.log 'tile added', event[1].get('Position')
 			for i in [0..5]
-				corner = hexCorner {x: 0, y:0}, 50, i
+				corner = hexCorner event[1].get('Position')[0], 70, i
+				console.log corner
 				corners.push corner
 			graphics = new PIXI.Graphics()
-			console.log corners
 			graphics.beginFill '#FFFF00'
 			graphics.drawShape new PIXI.Polygon corners
 			graphics.endFill()
