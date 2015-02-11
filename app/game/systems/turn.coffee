@@ -19,8 +19,8 @@ module.exports = class TurnSystem extends System
 
 	step: (deltaTime, state, receivers) =>
 		# What to do on several 'turn:end' in one tick? Currently collapses them into one.
-		turnEnded = receivers['!turn:end']()?
-		if turnEnded.length != 0
+		if receivers['!turn:end']().length > 0
+			console.log 'serialize'
 			@states.push @serializeState(state)
 		
 		for event in receivers['!turn:undo']()

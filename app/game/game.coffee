@@ -28,7 +28,7 @@ module.exports = class Game
 		logicStats = new Stats()
 		$(logicStats.domElement).addClass 'logic'
 		stats.append logicStats.domElement
-		stage = new PIXI.Stage(0x000000)
+		stage = new PIXI.Stage 0x000000, true
 		# Engine.
 		@initialize container, stage, renderStats, logicStats
 		container.append stats

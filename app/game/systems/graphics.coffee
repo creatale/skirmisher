@@ -20,9 +20,11 @@ module.exports = class GraphicsSystem extends System
 	bounds: false
 	stage: false
 	constructor: (@stage, @container, @stats, loadingFinished) ->
-		@receives = ['component-added:Sprite', 'component-removed:Sprite', 'component-added:Tile', '!graphics:twistEffect']
-		@renderer = PIXI.autoDetectRenderer(800, 600, autoResize: false)
-		
+		@receives = ['component-added:Sprite', 'component-removed:Sprite', 'component-added:Polygon', '!graphics:twistEffect']
+		@renderer = PIXI.autoDetectRenderer 800, 600,
+			autoResize: false
+			antialias: true
+
 		#@domElement = $(@renderer.view).css
 		#       width: '100%'
 		#       height: '100%'
@@ -169,25 +171,47 @@ module.exports = class GraphicsSystem extends System
 				else
 					@levelContainer.addChild item
 
-		hexCorner = (size, i) =>
-			angle = 2 * Math.PI / 6 * (i + 0.5)
-			x = size * (Math.cos angle)
-			y = size * (Math.sin angle)
-			return new PIXI.Point x, y
+	
 
-		for event in receivers['component-added:Tile']()
-			corners = []
+		for event in receivers['component-added:Polygon']()
 			# assume tiles never move
-			position = event[1].get('Position')[0]
-			for i in [0..5]
-				corner = hexCorner Tile::DISPLAY_SIZE/2, i
-				corners.push corner
+			entity = event[1]
+			polygonComponent = event[0]
+			position = entity.get('Position')[0]
+			
 			graphics = new PIXI.Graphics()
+			pixiPoints = []
+			for point in polygonComponent.points
+				pixiPoints.push new PIXI.Point point.x, point.y
+			polygon = new PIXI.Polygon pixiPoints
 			graphics.beginFill 0xFF0000
-			graphics.drawShape new PIXI.Polygon corners
+			graphics.drawShape polygon
 			graphics.endFill()
-			graphics.position.x = position.x * Tile::DISPLAY_SIZE
-			graphics.position.y = position.y * Tile::DISPLAY_SIZE
+			graphics.position.x = position.x
+			graphics.position.y = position.y
+			graphics.interactive = true
+			
+			graphics.mouseover = ->
+				state.emitEvent 'graphics:mouse-over-polygon', 
+				@clear()
+				@lineStyle 10, 0xFFFF00
+				@beginFill 0xFF0000
+				@drawShape polygon
+				@endFill()
+
+
+			graphics.mouseout = ->
+				@clear()
+				@beginFill 0xFF0000
+				@drawShape polygon
+				@endFill()
+
+			graphics.click = ->
+				@clear()
+				@beginFill 0xFF00FF
+				@drawShape polygon
+				@endFill()
+
 			@levelContainer.addChild graphics
 
 
