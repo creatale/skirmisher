@@ -17,28 +17,35 @@ hex = require '../lib/hex'
 
 module.exports = class MapSystem extends System
 	constructor: ->
-		@receives = []
+		@receives = ['graphics:mouse-over-polygon', 'graphics:mouse-out-polygon', 'graphics:clicked-polygon']
 
 		return
 
 	step: (deltaTime, state, receivers) ->
-		if state.queryEntities(Map)[0]?
-			return
-		else
-			map = state.createEntity()
-			map.addComponent Map
-			for x in [1..Map::WIDTH]
-				for y in [1..Map::HEIGHT]
-					tile = state.createEntity()
-					tile.addComponent(new Tile {x: x, y: y})
-					polygon = new Polygon()
-					for i in [0..5]
-						corner = hexCorner Tile::DISPLAY_SIZE/2, i
-						polygon.points.push corner
-					tile.addComponent polygon
-					pos = hex.tileToSurfaceCoordinates x, y
+		@createMap(state) unless state.queryEntities(Map)[0]?
+		for event in receivers['graphics:mouse-over-polygon']()
+			event[0].strokeWidth = 10
+		for event in receivers['graphics:mouse-out-polygon']()
+			event[0].strokeWidth = 0
+		for event in receivers['graphics:clicked-polygon']()
+			continue# event[0].strokeWidth = 10
+		
 
-					tile.addComponent(new Position(pos.x * Tile::DISPLAY_SIZE, pos.y * Tile::DISPLAY_SIZE))
+	createMap: (state) =>
+		map = state.createEntity()
+		map.addComponent Map
+		for x in [1..Map::WIDTH]
+			for y in [1..Map::HEIGHT]
+				tile = state.createEntity()
+				tile.addComponent(new Tile {x: x, y: y})
+				polygon = new Polygon()
+				for i in [0..5]
+					corner = hexCorner Tile::DISPLAY_SIZE/2, i
+					polygon.points.push corner
+				tile.addComponent polygon
+				pos = hex.tileToSurfaceCoordinates x, y
+
+				tile.addComponent(new Position(pos.x * Tile::DISPLAY_SIZE, pos.y * Tile::DISPLAY_SIZE))
 		return
 
 hexCorner = (size, i) ->

@@ -2,6 +2,7 @@
 Sprite = require '../components/sprite'
 Position = require '../components/position'
 Tile = require '../components/tile'
+Polygon = require '../components/polygon'
 GraphicsConstants = require '../lib/graphics_constants'
 
 DEBUG = false
@@ -179,40 +180,28 @@ module.exports = class GraphicsSystem extends System
 			polygonComponent = event[0]
 			position = entity.get('Position')[0]
 			
-			graphics = new PIXI.Graphics()
+			g = new PIXI.Graphics()
 			pixiPoints = []
 			for point in polygonComponent.points
 				pixiPoints.push new PIXI.Point point.x, point.y
 			polygon = new PIXI.Polygon pixiPoints
-			graphics.beginFill 0xFF0000
-			graphics.drawShape polygon
-			graphics.endFill()
-			graphics.position.x = position.x
-			graphics.position.y = position.y
-			graphics.interactive = true
+			polygonComponent._polygon = polygon
 			
-			graphics.mouseover = ->
-				state.emitEvent 'graphics:mouse-over-polygon', 
-				@clear()
-				@lineStyle 10, 0xFFFF00
-				@beginFill 0xFF0000
-				@drawShape polygon
-				@endFill()
+			g.position.x = position.x
+			g.position.y = position.y
+			g.interactive = true
+			polygonComponent._graphics = g
+			do (entity, polygonComponent) ->
+				g.mouseover = ->
+					state.emitEvent 'graphics:mouse-over-polygon', polygonComponent, entity
 
+				g.mouseout = ->
+					state.emitEvent 'graphics:mouse-out-polygon', polygonComponent, entity
 
-			graphics.mouseout = ->
-				@clear()
-				@beginFill 0xFF0000
-				@drawShape polygon
-				@endFill()
+				g.click = ->
+					state.emitEvent 'graphics:clicked-polygon', polygonComponent, entity
 
-			graphics.click = ->
-				@clear()
-				@beginFill 0xFF00FF
-				@drawShape polygon
-				@endFill()
-
-			@levelContainer.addChild graphics
+			@levelContainer.addChild g
 
 
 
@@ -253,6 +242,17 @@ module.exports = class GraphicsSystem extends System
 					sprite.object.rotation = position.rotation or 0
 				else
 					sprite.object.visible = false
+
+		for entity in state.queryEntities [Polygon]
+			position = entity.get('Position')[0]
+			polygon = entity.get('Polygon')[0]
+
+			g = polygon._graphics
+			g.clear()
+			g.beginFill polygon.fillColor
+			g.lineStyle polygon.strokeWidth, polygon.strokeColor
+			g.drawShape polygon._polygon
+			g.endFill()
 		return
 			
 		
