@@ -113,8 +113,13 @@ class State
 			@tryCompactIdSpace = false
 			@currentEntityId = @scanForHighestId() + 1
 		entity = new Entity @currentEntityId
-		@entities[@currentEntityId] = entity
 		@currentEntityId++
+		@addEntity entity
+		
+	addEntity: (entity) =>
+		throw new Error('Entity already exists') if @entities[entity.id]?
+		
+		@entities[entity.id] = entity
 		entity.on 'all-components-removed', (type) =>
 			list = @entitiesByComponent[type]
 			list.splice list.indexOf(entity), 1
@@ -128,7 +133,6 @@ class State
 		return entity
 		
 	removeEntity: (entity) =>
-		id = entity?.id ? entity
 		id = entity?.id ? entity
 		entityToRemove = @entities[id]
 		return unless entityToRemove?.components?
