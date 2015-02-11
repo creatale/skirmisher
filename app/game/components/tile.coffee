@@ -4,3 +4,4 @@ module.exports = class Tile
   DISPLAY_SIZE: 100
 
   constructor: (@coordinates) ->
+  	@selected = false

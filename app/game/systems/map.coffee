@@ -28,7 +28,17 @@ module.exports = class MapSystem extends System
 		for event in receivers['graphics:mouse-out-polygon']()
 			event[0].strokeWidth = 0
 		for event in receivers['graphics:clicked-polygon']()
-			continue# event[0].strokeWidth = 10
+			for entity in state.queryEntities [Polygon]
+				tile = entity.get(Tile)[0]
+				if entity.id is event[1].id
+					polygon = entity.get(Polygon)[0]
+					tile.selected = true
+					polygon.fillColor = 0xFF00FF
+				else if tile.selected
+					polygon = entity.get(Polygon)[0]
+					tile.selected = false
+					polygon.fillColor = 0xFF0000
+
 		
 
 	createMap: (state) =>
