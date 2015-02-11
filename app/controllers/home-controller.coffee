@@ -2,14 +2,7 @@ mediator = require 'mediator'
 
 Controller = require 'controllers/base/controller'
 HomeView = require 'views/home-view'
-MainMenuView = require 'views/main-menu-view'
-CreditsView = require 'views/credits-view'
-HighscoreView = require 'views/highscore-view'
-HowtoView = require 'views/howto-view'
-ExitView = require 'views/exit-view'
 GameView = require 'views/game-view'
-GameOverView = require 'views/game-over-view'
-
 
 module.exports = class HomeController extends Controller
 	index: ->

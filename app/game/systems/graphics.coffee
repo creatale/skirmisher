@@ -2,294 +2,23 @@
 Sprite = require '../components/sprite'
 Position = require '../components/position'
 GraphicsConstants = require '../lib/graphics_constants'
-PhysicsDebugDraw = require '../lib/PhysicsDebugDraw'
-Player = require '../components/player'
-
 
 DEBUG = false
 
 # Files to load from /images/$res/; either a value of ASSETS below or a sprite sheet.
 RESOURCES = [
-	'Hintergrund.jpg'
-	'Level-Area_large.png'
-	'level1.json'
-	'level2.json'
-	'level3.json'
-	'prince.json'
-	'weapons.json'
-	'player_laufen1.json'
-	'player_laufen2.json'
-	'player_laufen_mit_item1.json'
-	'player_laufen_mit_item2.json'
-	'player.json'
-	'creeps.json'
-	'Die_perfekte_Welle_1.png'
-	'Die_perfekte_Welle_2.png'
-	'Die_perfekte_Welle_3.png'
-	'feuer.json'
 	'alien_walk.json'
-	'alien_dying.json'
-	'alien_burning.json'
-	'alien_suicide.json'
-	'explosion.json'
-	'alien_dance.json'
-	'gewitter.json'
 ]
 
 # Maps `Sprite.texture` string to files; arrays define an animation
-ASSETS =
-	background: 'Level-Area_large.png'
-	# prince: [
-		# 'Prinz_Frame1.png'
-		# 'Prinz_Frame2.png'
-		# 'Prinz_Frame3.png'
-		# 'Prinz_Frame4.png'
-	# ]
-	'prince-dying': 'platform.png'
-	platform: 'platform.png'
-	traeger: 'Traeger_X.png'
-	traegerTex: 'Traeger_X_tex.png'
-	traegerEcke: 'Traeger_Ecke.png'
-	traegerEckeTex: 'Traeger_Ecke_tex.png'
-	bodenGrau: 'Boden_grau.png'
-	bodenGrauTex: 'Boden_grau_tex.png'
-	bodenKlinik: 'Boden_Klinik.png'
-	bodenKlinikTex: 'Boden_Klinik_tex.png'
-	tisch: 'Tisch.png'
-	tafel: 'Tafel.png'
-	chemieZubehor: 'Chemie-Zubehoer.png'
-	ampullen: 'Ampullen.png'
-	antenne: 'Antenne.png'
-	automat: 'Automat.png'
-	beamer: 'Beamer.png'
-	box: 'Box.png'
-	boxFramed: 'Box_framed.png'
-	boxSifi: 'Box_Sifi.png'
-	boxSifi2: 'Box_Sifi2.png'
-	flascheBlau: 'Flasche_blau.png'
-	flascheGruen: 'Flasche_gruen.png'
-	flascheRot: 'Flasche_rot.png'
-	flaschenBreit: 'Flaschen_breit.png'
-	flaschenBreit1: 'Flaschen_breit1.png'
-	flaschenBreit2: 'Flaschen_breit2.png'
-	flaschensammlung: 'Flaschensammlung.png'
-	flaschenstaender: 'Flaschenstaender.png'
-	leitungen: 'Leitungen.png'
-	pad: 'Pad.png'
-	panel: 'Panel.png'
-	platinenbox: 'Platinenbox.png'
-	ufo: 'Ufo.png'
-	bogenbajonett: 'Bogenbajonett.png'
-	bogenbajonettProjektil: 'Bogenbajonett-Projektil.png'
-	feuerball: 'Feuerball.png'
-	turret: 'Turret.png'
-	turretbullet1: 'Laser1.png'
-	turretbullet2: 'Laser2.png'
-	player_laufen: [
-		'player_laufen_00.png'
-		'player_laufen_01.png'
-		'player_laufen_02.png'
-		'player_laufen_03.png'
-		'player_laufen_04.png'
-		'player_laufen_05.png'
-		'player_laufen_06.png'
-		'player_laufen_07.png'
-		'player_laufen_08.png'
-		'player_laufen_09.png'
-		'player_laufen_10.png'
-		'player_laufen_11.png'
-		'player_laufen_12.png'
-	]
-	player_laufen_mit_item: [
-		'player_laufen_mit_item_00.png'
-		'player_laufen_mit_item_01.png'
-		'player_laufen_mit_item_02.png'
-		'player_laufen_mit_item_03.png'
-		'player_laufen_mit_item_04.png'
-		'player_laufen_mit_item_05.png'
-		'player_laufen_mit_item_06.png'
-		'player_laufen_mit_item_07.png'
-		'player_laufen_mit_item_08.png'
-		'player_laufen_mit_item_09.png'
-		'player_laufen_mit_item_10.png'
-		'player_laufen_mit_item_11.png'
-		'player_laufen_mit_item_12.png'
-	]
-	player: 'normal_albert.png'
-	player_mit_item: 'stehn_mit_item.png'
-	player_sprung: 'sprung.png'
-	player_sprung_mit_item: 'sprung_mit_item.png'
-	creep: 'alien_alien.png'
-	alien_walk: [
-		'alien_walk_00.png'
-		'alien_walk_01.png'
-		'alien_walk_02.png'
-		'alien_walk_03.png'
-		'alien_walk_04.png'
-		'alien_walk_05.png'
-		'alien_walk_06.png'
-		'alien_walk_07.png'
-		'alien_walk_08.png'
-		'alien_walk_09.png'
-		'alien_walk_10.png'
-	]
-	alien_dying: [
-		'alien_dying_00.png'
-		'alien_dying_01.png'
-		'alien_dying_02.png'
-		'alien_dying_03.png'
-		'alien_dying_04.png'
-		'alien_dying_05.png'
-		'alien_dying_06.png'
-		'alien_dying_07.png'
-		'alien_dying_08.png'
-		'alien_dying_09.png'
-		'alien_dying_10.png'
-		'alien_dying_11.png'
-		'alien_dying_12.png'
-		'alien_dying_13.png'
-		'alien_dying_14.png'
-		'alien_dying_15.png'
-	]
-	alien_suicide: [
-		'alien_suicide_00.png'
-		'alien_suicide_01.png'
-		'alien_suicide_02.png'
-		'alien_suicide_03.png'
-		'alien_suicide_04.png'
-		'alien_suicide_05.png'
-		'alien_suicide_06.png'
-		'alien_suicide_07.png'
-		'alien_suicide_08.png'
-		'alien_suicide_09.png'
-		'alien_suicide_10.png'
-	]
-	alien_burning: [
-		'alien_burning_00.png'
-		'alien_burning_00.png'
-		'alien_burning_01.png'
-		'alien_burning_01.png'
-		'alien_burning_00.png'
-		'alien_burning_00.png'
-		'alien_burning_01.png'
-		'alien_burning_01.png'
-		'alien_burning_00.png'
-		'alien_burning_00.png'
-		'alien_burning_01.png'
-		'alien_burning_01.png'
-		'alien_burning_00.png'
-		'alien_burning_00.png'
-		'alien_burning_01.png'
-		'alien_burning_01.png'
-		'alien_burning_00.png'
-		'alien_burning_00.png'
-		'alien_burning_01.png'
-		'alien_burning_01.png'
-		'alien_burning_02.png'
-		'alien_burning_03.png'
-		'alien_burning_04.png'
-		'alien_burning_05.png'
-		'alien_burning_06.png'
-		'alien_burning_07.png'
-		'alien_burning_08.png'
-		'alien_burning_09.png'
-		'alien_burning_10.png'
-		'alien_burning_11.png'
-		'alien_burning_12.png'
-		'alien_burning_13.png'
-		'alien_burning_14.png'
-		'alien_burning_15.png'
-	]
-	alien_dance: [
-		'alien_dance_00.png'
-		'alien_dance_00.png'
-		'alien_dance_00.png'
-		'alien_dance_01.png'
-		'alien_dance_01.png'
-		'alien_dance_01.png'
-	]
-	rolling_stone: [
-		'rolling_stone1.png'
-		'rolling_stone1.png'
-		'rolling_stone1.png'
-		'rolling_stone1.png'
-		'rolling_stone2.png'
-		'rolling_stone2.png'
-		'rolling_stone3.png'
-		'rolling_stone3.png'
-		'rolling_stone2.png'
-		'rolling_stone2.png'
-	]
-	stone: [
-		'rolling_stone3.png'
-	]
-
-
-	instantwater: 'Instant_Water.png'
-	welle: [
-		'Die_perfekte_Welle_1.png'
-		'Die_perfekte_Welle_1.png'
-		'Die_perfekte_Welle_1.png'
-		'Die_perfekte_Welle_1.png'
-		'Die_perfekte_Welle_2.png'
-		'Die_perfekte_Welle_2.png'
-		'Die_perfekte_Welle_2.png'
-		'Die_perfekte_Welle_2.png'
-		'Die_perfekte_Welle_3.png'
-		'Die_perfekte_Welle_3.png'
-		'Die_perfekte_Welle_3.png'
-		'Die_perfekte_Welle_3.png'
-	]
-	firetrail: [
-		'Feuerspur.png'
-		'Feuerspur2.png'
-		'Feuerspur3.png'
-		'Feuerspur4.png'
-	]
-	ggj: 'Marmelade.png'
-	mindcontrol: 'Mindcontrol.png'
-	weathermachine: 'Wettermaschine.png'
-	cloud: [
-		'Wolke.png'
-		'Wolke.png'
-		'Wolke.png'
-		'Wolke.png'
-		'Wolke.png'
-		'Wolke2.png'
-		'Wolke2.png'
-		'Wolke2.png'
-		'Wolke2.png'
-		'Wolke2.png'
-		'Wolke3.png'
-		'Wolke3.png'
-		'Wolke3.png'
-		'Wolke3.png'
-		'Wolke3.png'
-	]
-	lightning: [
-		'Blitz1.png'
-		'Blitz2.png'
-		'Blitz3.png'
-	]
-	railgun: 'Railgun.png'
-	rail: 'rail.png'
-	lawnchair: 'Lawnchair.png'
-	rocketlawnchair: 'Rocket_Lawnchair.png'
-	prankgun: 'Scherzpistole.png'
-	'prankgun-firing': 'Scherzpistole-Feuer.png'
-	tarnkappe: 'Tarnkappe.png'
-	explosion: [
-		'Explosion1.png'
-		'Explosion2.png'
-		'Explosion3.png'
-		'Explosion4.png'
-		'Explosion5.png'
-	]
+ASSETS = {
+	dummy: 'alien_walk_00.png'
+}
 
 module.exports = class GraphicsSystem extends System
 	bounds: false
 	stage: false
-	constructor: (@stage, @container, @stats, @physicsEngine, loadingFinished) ->
+	constructor: (@stage, @container, @stats, loadingFinished) ->
 		@receives = ['component-added:Sprite', 'component-removed:Sprite', '!graphics:twistEffect']
 		@renderer = PIXI.autoDetectRenderer(800, 600, autoResize: false)
 		
@@ -329,10 +58,6 @@ module.exports = class GraphicsSystem extends System
 		@counter = new PIXI.Text '', font: '50px Titan One', fill: '#FEC'
 		@stage.addChild @counter
 		@loadAssets(loadingFinished)
-
-		if DEBUG
-			@physicsDebug = new PhysicsDebugDraw @
-			@physicsEngine.render = @physicsDebug
 
 		@resize()
 		@animate()
@@ -405,8 +130,6 @@ module.exports = class GraphicsSystem extends System
 	animate: =>
 		@stats.begin()
 		@renderer.render @stage
-		if DEBUG
-			Matter.Engine.render @physicsEngine
 		@stats.end()
 		requestAnimationFrame @animate
 		return
@@ -414,23 +137,6 @@ module.exports = class GraphicsSystem extends System
 	# Update graphics state
 	step: (deltaTime, state, receivers) =>
 		return unless @textures?
-		playerCameraOffset = 
-			x: 3
-			y: 3
-		player = state.queryEntities([Player])[0]
-		playerComponent = player.get(Player)[0]
-		playerPos = player.get(Position)[0]
-
-		setLayerPosition = (layer) =>
-			layer.position.x = -1 * (playerPos.x - playerCameraOffset.x) * GraphicsConstants.WORLD_TO_ASSET_SCALE * layer.scale.x
-			layer.position.y = -1 * (playerPos.y + playerCameraOffset.y) * GraphicsConstants.WORLD_TO_ASSET_SCALE * layer.scale.y + @container.height() / 2
-		
-		setLayerPosition @levelContainer
-		setLayerPosition @backgroundContainer
-		setLayerPosition @weaponContainer
-		@counter.setText playerComponent.progress.toFixed(0) + ' m'
-		# Parallax backgrounds
-		@background.tilePosition.x = -1 * playerComponent.progress * GraphicsConstants.WORLD_TO_ASSET_SCALE * 0.7
 
 		# Create PIXI sprite for new sprites.
 		for event in receivers['component-added:Sprite']()

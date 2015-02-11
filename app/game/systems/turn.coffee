@@ -11,12 +11,10 @@
 #	- '!turn:undo'
 #	- '!turn:end'
 
-module.exports = TurnSystem extends System
-
+module.exports = class TurnSystem extends System
 	constructor: ->
 		@receives = ['!turn:undo', '!turn:end']
 		return
 
 	step: (deltaTime, state, receivers) ->
-
 		return

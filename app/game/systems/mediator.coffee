@@ -1,5 +1,4 @@
 {System} = require '../base/ecs'
-Player = require '../components/player'
 mediator = require '/mediator'
 
 #
@@ -17,6 +16,3 @@ module.exports = class MediatorSystem extends System
 		return
 
 	step: (deltaTime, state, receivers) =>
-		for event in receivers['!mediator:game-over']()
-			score = state.queryComponents(Player)[0].progress
-			mediator.publish 'game-over', 'bla', score.toFixed(1)
