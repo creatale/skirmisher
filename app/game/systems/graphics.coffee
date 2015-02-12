@@ -242,6 +242,8 @@ module.exports = class GraphicsSystem extends System
 			polygon = entity.get('Polygon')[0]
 
 			g = polygon._graphics
+			g.position.x = position.x
+			g.position.y = position.y
 			g.clear()
 			g.beginFill polygon.fillColor
 			g.lineStyle polygon.strokeWidth, polygon.strokeColor

@@ -8,12 +8,12 @@ Tile = require '../components/tile'
 module.exports = class UnitCreationSystem extends System
 
 	constructor: ->
-		@receives = ['!unit:add']
+		@receives = ['!unit:create']
 
 		return
 
 	step: (deltaTime, state, receivers) ->
-		for event in receivers['!unit:add']()
+		for event in receivers['!unit:create']()
 			@createUnit(state, event[0].coordinates)
 		return
 

@@ -11,6 +11,8 @@ PickingSystem = require './systems/picking'
 TurnSystem = require './systems/turn'
 MapSystem = require './systems/map'
 UnitCreationSystem = require './systems/unit_creation'
+UnitMovementSystem = require './systems/unit_movement'
+
 
 Input = require './components/input'
 InputSettings = require './components/input_settings'
@@ -56,6 +58,7 @@ module.exports = class Game
 		@engine.addSystem graphics
 		@engine.addSystem new LogicStatsEndSystem logicStats
 		@engine.addSystem UnitCreationSystem
+		@engine.addSystem UnitMovementSystem
 
 		@engine.addSystem MediatorSystem # always last!
 		return
