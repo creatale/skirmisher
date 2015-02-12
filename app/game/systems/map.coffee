@@ -12,6 +12,7 @@ hex = require '../lib/hex'
 #	The one chosen coordinate system: odd-r
 #
 # emits:
+#		- map:tile-selected
 #
 # receives:
 
@@ -24,24 +25,24 @@ module.exports = class MapSystem extends System
 	step: (deltaTime, state, receivers) ->
 		@createMap(state) unless state.queryEntities(Map)[0]?
 		for event in receivers['graphics:mouse-over-polygon']()
+			continue unless event[1].has Tile
 			event[0].strokeWidth = 10
 		for event in receivers['graphics:mouse-out-polygon']()
+			continue unless event[1].has Tile
 			event[0].strokeWidth = 0
 		for event in receivers['graphics:clicked-polygon']()
-			for entity in state.queryEntities [Polygon]
+			continue unless event[1].has Tile
+			for entity in state.queryEntities [Tile]
 				tile = entity.get(Tile)[0]
-				if entity.id is event[1].id
+				if entity.id is event[1].id and not tile.selected
 					polygon = entity.get(Polygon)[0]
 					tile.selected = true
 					polygon.fillColor = 0xFF00FF
+					state.emitEvent 'map:tile-selected', tile, entity
 				else if tile.selected
 					polygon = entity.get(Polygon)[0]
 					tile.selected = false
 					polygon.fillColor = 0xFF0000
-
-		for event in receivers['!console:add-unit']()
-			console
-
 		
 
 	createMap: (state) =>
@@ -55,6 +56,7 @@ module.exports = class MapSystem extends System
 				for i in [0..5]
 					corner = hexCorner Tile::DISPLAY_SIZE/2, i
 					polygon.points.push corner
+				polygon.interactive = true
 				tile.addComponent polygon
 				pos = hex.tileToSurfaceCoordinates x, y
 
