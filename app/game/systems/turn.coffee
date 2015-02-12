@@ -10,14 +10,17 @@
 # receives:
 #	- '!turn:undo'
 #	- '!turn:end'
+#	- '!console:add-unit'
 
 module.exports = class TurnSystem extends System
 	constructor: ->
-		@receives = ['!turn:undo', '!turn:end']
+		@once = false
+		@receives = ['!turn:undo', '!turn:end', '!console:add-unit']
 		@states = []
 		return
 
 	step: (deltaTime, state, receivers) =>
+
 		# What to do on several 'turn:end' in one tick? Currently collapses them into one.
 		turnEnded = receivers['!turn:end']().length
 		if turnEnded
@@ -25,7 +28,9 @@ module.exports = class TurnSystem extends System
 		
 		for event in receivers['!turn:undo']()
 			@restoreState state, @states.pop()
-			
+
+		for event in receivers['!console:add-unit']()
+			console.log 'add unit event caught'
 		return
 		
 	serializeState: (state) =>
