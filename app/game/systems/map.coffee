@@ -57,6 +57,7 @@ module.exports = class MapSystem extends System
 				for i in [0..5]
 					corner = hexCorner Tile::DISPLAY_SIZE/2, i
 					polygon.points.push corner
+				polygon.interactive = true
 				tile.addComponent polygon
 				pos = hex.tileToSurfaceCoordinates x, y
 
