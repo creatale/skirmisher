@@ -189,7 +189,7 @@ module.exports = class GraphicsSystem extends System
 			
 			g.position.x = position.x
 			g.position.y = position.y
-			g.interactive = true
+			g.interactive = polygonComponent.interactive
 			polygonComponent._graphics = g
 			do (entity, polygonComponent) ->
 				g.mouseover = ->
@@ -218,12 +218,6 @@ module.exports = class GraphicsSystem extends System
 				else
 					@levelContainer.removeChild spriteComponent.object
 			spriteComponent.object = null
-			
-		for event in receivers['!graphics:twistEffect']()
-			@effectTime = 5
-			filter = new PIXI.TwistFilter()
-			filter.radius = 0.5
-			@levelContainer.filters = [filter]
 			
 		@effectTime -= deltaTime
 		if @effectTime < 0
