@@ -1,4 +1,8 @@
 {System, Entity} = require '../base/ecs'
+Map = require '../components/map'
+Sprite = require '../components/sprite'
+Tile = require '../components/tile'
+Polygon = require '../components/polygon'
 
 # TurnSystem
 #
@@ -51,36 +55,89 @@ module.exports = class TurnSystem extends System
 			
 		# Serialize (pending) events
 		for eventName, listener of state.eventEmitter.listeners
+			if /^component-added:/.test eventName
+				continue
 			target = serialized.pendingEvents[eventName] = []
+			
 			for subscriber in listener
-				target.push JSON.stringify subscriber.aggregatedEvents, entityReplacer
+				serializedEvent = subscriber.aggregatedEvents.map serializeEvent
+				target.push JSON.stringify(serializedEvent)
 		return serialized
 		
 	restoreState: (target, serializedState) =>
 		for entity of target.entities
 			target.removeEntity entity
+		for eventName, listener of target.eventEmitter.listeners when /^component-added:/.test eventName
+			for subscriber in listener
+				subscriber.aggregatedEvents = []
 		
 		for serializedEntity in serializedState.entities
 			entity = new Entity serializedEntity.id
 			target.addEntity entity
 			for componentType, components of serializedEntity.components
-				for serializedComponent of components
+				for serializedComponent in components
 					data = JSON.parse serializedComponent
-					# FIXME Needs a factory
-					component = entity.addComponent componentType
-					for key, value of data
-						component[key] = value
+					entity.addComponent @restoreComponent(componentType, data)
 						
 		for eventName, listeners of serializedState.pendingEvents
 			for serializedEvents, index in listeners
-				target.eventEmitter[eventName][index].aggregatedEvents = JSON.parse serializedEvents
+				list = JSON.parse(serializedEvents).map(restoreEvent)
+				targetListener = target.eventEmitter.listeners[eventName][index]
+				if /^component-removed:/.test eventName
+					targetListener.aggregatedEvents.push list...
+				else
+					targetListener.aggregatedEvents = list
 				
 		return
+	
+	restoreComponent: (type, serializedData) ->
+		# Factory portion of deserialization. We only need to know all components which either:
+		#  a) have prototype properties beyond type (e.g. constants) or
+		#  b) have method(s).
+		component = switch type
+			when 'Map' then new Map()
+			when 'Sprite' then new Sprite()
+			when 'Tile' then new Tile()
+			when 'Polygon' then new Polygon()
+			else Object.create {type}
+
+		for key, value of serializedData
+			component[key] = value
+		return component
 
 
-entityReplacer = (key, value) ->
-	if value instanceof Entity
-		return 'entity:' + value.id
-	return value
-
-# entityReviver
+	restoreEvent = (state, serializedData) ->
+		result = new Array(serializedData.length)
+		entity = null
+		
+		for thing, index in serializedData
+			if /^entity:/.test thing
+				id = thing[7..]
+				entity = result[index] = state.queryEntityById id
+		
+		for thing, index in serializedData when not result[index]?
+			if /^component:/.test thing
+				[type, index] = thing[10..].split(':')
+				result[index] = entity.get(type)[index]
+			else
+				result[index] = thing
+				
+		return result
+		
+		
+	serializeEvent = (eventArguments) ->
+		result = new Array(eventArguments.length)
+		for thing, index in eventArguments
+			if thing instanceof Entity
+				entity = thing
+				result[index] = 'entity:' + thing.id
+		
+		for thing, index in eventArguments when not result[index]?
+			for componentType, list of entity?.components ? []
+				idx = list.indexOf(thing)
+				if idx >= 0
+					result[index] = 'component:' + componentType + ':' + idx
+					
+			result[index] ?= thing
+	
+		return result
