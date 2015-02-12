@@ -20,7 +20,7 @@ module.exports = class MediatorSystem extends System
 
 	step: (deltaTime, state, receivers) =>
 		for command in @userCommands
-			state.emitEvent '!console:add-unit'
+			state.emitEvent '!console:add-unit', command
 
 	userCommand: (command) =>
 		@userCommands.push command
