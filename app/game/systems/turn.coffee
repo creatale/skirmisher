@@ -29,8 +29,6 @@ module.exports = class TurnSystem extends System
 		for event in receivers['!turn:undo']()
 			@restoreState state, @states.pop()
 
-		for event in receivers['!console:add-unit']()
-			console.log 'add unit event caught'
 		return
 		
 	serializeState: (state) =>

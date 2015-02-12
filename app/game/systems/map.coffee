@@ -39,6 +39,9 @@ module.exports = class MapSystem extends System
 					tile.selected = false
 					polygon.fillColor = 0xFF0000
 
+		for event in receivers['!console:add-unit']()
+			console
+
 		
 
 	createMap: (state) =>
