@@ -15,7 +15,7 @@
 module.exports = class TurnSystem extends System
 	constructor: ->
 		@once = false
-		@receives = ['!turn:undo', '!turn:end', '!console:add-unit']
+		@receives = ['!turn:undo', '!turn:end']
 		@states = []
 		return
 

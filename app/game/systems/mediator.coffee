@@ -7,7 +7,7 @@ mediator = require '/mediator'
 # interfaces with global page state out of the game itself
 #
 # emits
-# receives '!console:add-unit'
+# receives
 #
 
 module.exports = class MediatorSystem extends System
@@ -20,7 +20,7 @@ module.exports = class MediatorSystem extends System
 
 	step: (deltaTime, state, receivers) =>
 		for command in @userCommands
-			state.emitEvent '!console:add-unit', command
+			state.emitEvent '!unit:add', command
 
 	userCommand: (command) =>
 		@userCommands.push command

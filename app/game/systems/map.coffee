@@ -17,7 +17,7 @@ hex = require '../lib/hex'
 
 module.exports = class MapSystem extends System
 	constructor: ->
-		@receives = ['graphics:mouse-over-polygon', 'graphics:mouse-out-polygon', 'graphics:clicked-polygon', '!console:add-unit']
+		@receives = ['graphics:mouse-over-polygon', 'graphics:mouse-out-polygon', 'graphics:clicked-polygon']
 
 		return
 
@@ -39,12 +39,8 @@ module.exports = class MapSystem extends System
 					tile.selected = false
 					polygon.fillColor = 0xFF0000
 
-		for event in receivers['!console:add-unit']()
-			console.log 'yay'
-
 		return
 
-		
 
 	createMap: (state) =>
 		map = state.createEntity()
